@@ -1,6 +1,6 @@
 function luckdraw(canvas, data) {
 	this.canvas = canvas;
-	this.data = data;//[  { goods: 19, name: "花生", pics: './huasheng.jpg' }]
+	this.data = data || [];//[  { goods: 19, name: "花生", pics: './huasheng.jpg' }]
 	this.goods = {};
 	this.colors = [
 		"#AE3EFF",
@@ -13,7 +13,7 @@ function luckdraw(canvas, data) {
 
 	this.outsideRadius = 340; //转盘外圆的半径
 	this.textRadius = 320; //转盘奖品位置距离圆心的距离
-	this.insideRadius = 68; //转盘内圆的半径
+	this.insideRadius = 10; //转盘内圆的半径
 	this.startAngle = 0; //开始角度
 	this.bRotate = false;//false:停止;ture:旋转
 
@@ -46,7 +46,13 @@ function luckdraw(canvas, data) {
 		//使用了beginPath(),canvas会知道是重新画一条，如果给这几条设置不同的属性也是可以的。
 		for (var index = 0; index < this.data.length; index++) {
 			var angle = this.startAngle + index * baseAngle;
-			ctx.fillStyle = this.colors[index];
+			if (this.colors.length > index) {
+				ctx.fillStyle = this.colors[index];
+			} else {
+				ctx.fillStyle = this.colors[index % this.colors.length];
+			}
+
+
 			ctx.beginPath();
 			ctx.arc(canvasW * 0.5, canvasH * 0.5, this.outsideRadius, angle, angle + baseAngle, false);
 			ctx.arc(canvasW * 0.5, canvasH * 0.5, this.insideRadius, angle + baseAngle, angle, true);
