@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html style="font-size: 54.8px;">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>转盘抽奖</title>
+
+    <style>
+        /*抽奖大转盘开始*/
+        .ck-wheel {
+            width: 100%;
+            height: 6.64rem;
+            background: url(./balloon@2x.png) no-repeat center/100%;
+        }
+
+        .wheel {
+            display: block;
+            width: 6.64rem;
+            height: 6.64rem;
+            position: relative;
+            background-image: url(./wheel-bg.png);
+            background-size: 100% 100%;
+            margin: 0 auto;
+        }
+
+        img.pointer {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -1.5rem;
+            margin-top: -1.5rem;
+            width: 3rem;
+            height: 3.3rem;
+
+        }
+
+        #wheelCanvas {
+            width: 6.64rem;
+            height: 6.64rem;
+            transition: all 5s;
+            -moz-transition: all 5s;
+            /* Firefox 4 */
+            -webkit-transition: all 5s;
+            /* Safari 和 Chrome */
+            -o-transition: all 5s;
+            /* Opera */
+            transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            /* IE 9 */
+            -webkit-transform: rotate(0deg);
+            /* Safari and Chrome */
+            -o-transform: rotate(0deg);
+            /* Opera */
+            -moz-transform: rotate(0deg);
+            /* Firefox */
+        }
+
+        /*抽奖大转盘结束*/
+    </style>
+</head>
+
+<body>
+
+    <div class="ck-wheel">
+        <div class="wheel">
+            <canvas class="item" id="wheelCanvas" width="844px" height="844px"></canvas>
+            <img class="pointer" src="./wheel-pointer.png" id="pointer" />
+        </div>
+    </div>
+
+    <script>
+
+        //抽奖转盘
+        var turnWheel = {
+            data: [
+                { good: 19, name: "花生", pics: './huasheng.jpg' },
+                { good: 39, name: "瓜子", pics: './huasheng.jpg' },
+                { good: 30, name: "啤酒", pics: './huasheng.jpg' },
+                { good: 40, name: "饮料", pics: './huasheng.jpg' },
+                { good: 16, name: "矿泉水", pics: './huasheng.jpg' },
+                { good: 19, name: "花生", pics: './huasheng.jpg' }],
+
+            rewardUrl: [], //转盘奖品图片 
+            colors: [
+                "#AE3EFF",
+                "#4D3FFF",
+                "#FC262C",
+                "#3A8BFF",
+                "#EE7602",
+                "#FE339F"
+            ], //转盘奖品区块对应背景颜色
+            outsideRadius: 340, //转盘外圆的半径
+            textRadius: 320, //转盘奖品位置距离圆心的距离
+            insideRadius: 68, //转盘内圆的半径
+            startAngle: 0, //开始角度
+            bRotate: false //false:停止;ture:旋转
+        };
+
+        function loadImg() {
+            for (var i = 0; i < turnWheel.data.length; i++) {
+                if (turnWheel.data[i].pics) {
+                    var imgUrl = new Image();
+                    imgUrl.src = turnWheel.data[i].pics;
+                    turnWheel.data[i].imgUrl = imgUrl
+                }
+
+            }
+        }
+        loadImg();
+
+        var pointer = document.getElementById('pointer');
+        var wheelCanvas = document.getElementById("wheelCanvas");
+        wheelCanvas.addEventListener('transitionend', function () {
+            turnWheel.bRotate = false;
+            console.log("jieshu");
+        }, false)
+
+        window.onload = function () {
+            drawWheelCanvas();
+            pointer.onclick = start;
+        };
+        function start() {
+            // 正在转动，阻止转动
+            if (turnWheel.bRotate) return;
+            turnWheel.bRotate = true;
+            // 请求数据
+            var id = 30;
+            var count = turnWheel.data.length;
+            // 开始抽奖
+            rotateFunc(id, count);
+        }
+
+        var luckNum = 1;
+        //旋转转盘 id:奖品id，从0开始的; txt：提示语 ,count 奖品的总数量;
+        function rotateFunc(id, count) {
+            var index = null;
+            var goods = null;
+            for (var i = 0; i < turnWheel.data.length; i++) {
+                var element = turnWheel.data[i];
+                if (element.good == id) {
+                    index = i;
+                    goods = element;
+                    break;
+                }
+            }
+            console.log(goods);
+
+            if (goods) {
+                var baseAngle = 360 / count;//扇形的角度
+                var angles = index * baseAngle + 90; //要指向的扇形起始角度； 第一个奖品是从0°水平方向，所以加90度
+                var stopAngles = angles + baseAngle / 2;//停留的角度，baseAngle / 2是停留在扇形中间
+                var rotate = luckNum * 1800 + stopAngles;//旋转停下的位置，luckNum记录第几次，旋转5圈
+                console.log(rotate);
+
+                wheelCanvas.style.msTransform = 'rotate(-' + rotate + 'deg)';
+                wheelCanvas.style.MozTransform = 'rotate(-' + rotate + 'deg)';
+                wheelCanvas.style.OTransform = 'rotate(-' + rotate + 'deg)';
+                wheelCanvas.style.webkitTransform = 'rotate(-' + rotate + 'deg)';
+                wheelCanvas.style.transform = 'rotate(-' + rotate + 'deg)';
+
+                luckNum += 1;
+            } else {
+                alert("商品信息错误")
+            }
+
+        };
+
+        function drawWheelCanvas() {
+            var canvas = document.getElementById("wheelCanvas");
+            var baseAngle = Math.PI * 2 / (turnWheel.data.length);
+            var ctx = canvas.getContext("2d");
+            var canvasW = canvas.width; // 画板的高度
+            var canvasH = canvas.height; // 画板的宽度
+            console.log(canvasW);
+            ctx.fillStyle = "#fff000";
+            ctx.clearRect(0, 0, canvasW, canvasH);//去掉背景默认的黑色
+            console.log(canvasW);
+            ctx.strokeStyle = "#199301"; //线的颜色
+            ctx.font = '26px Microsoft YaHei';
+            //ctx.closePath();
+            //使用了beginPath(),canvas会知道是重新画一条，如果给这几条设置不同的属性也是可以的。
+            for (var index = 0; index < turnWheel.data.length; index++) {
+                var angle = turnWheel.startAngle + index * baseAngle;
+                ctx.fillStyle = turnWheel.colors[index];
+                ctx.beginPath();
+                ctx.arc(canvasW * 0.5, canvasH * 0.5, turnWheel.outsideRadius, angle, angle + baseAngle, false);
+                ctx.arc(canvasW * 0.5, canvasH * 0.5, turnWheel.insideRadius, angle + baseAngle, angle, true);
+                ctx.stroke();
+                ctx.fill();
+                ctx.save();
+                ctx.fillStyle = "#FFFF00";
+                var rewardName = turnWheel.data[index].name;
+
+                var line_height = 24;
+                var translateX = canvasW * 0.5 + Math.cos(angle + baseAngle / 2) * turnWheel.textRadius;
+                var translateY = canvasH * 0.5 + Math.sin(angle + baseAngle / 2) * turnWheel.textRadius;
+                ctx.translate(translateX, translateY);
+                ctx.rotate(angle + baseAngle / 2 + Math.PI / 2);
+                ctx.fillText(rewardName, -ctx.measureText(rewardName).width / 2, 100);
+
+                //添加对应图标
+                if (turnWheel.data[index].imgUrl) {
+                    ctx.drawImage(turnWheel.data[index].imgUrl, -35, 0, 60, 60);
+                }
+
+                ctx.restore(); //很关键
+            }
+        }
+
+    </script>
+</body>
+
+</html>
