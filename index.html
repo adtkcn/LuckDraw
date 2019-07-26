@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="font-size: 54.8px;">
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -11,10 +11,11 @@
         /*抽奖大转盘开始*/
 
         .wheel {
-            display: block;
+            position: relative;
+            /* display: block; */
             max-width: 660px;
             /* height: 660px; */
-            position: relative;
+
             background-image: url(./wheel-bg.png);
             background-size: 100% 100%;
             margin: 0 auto;
@@ -69,6 +70,10 @@
     <div>
         <button id="reset">重新设置数据</button>
     </div>
+
+    <div>
+        <a href="https://github.com/adtkcn/LuckDraw">https://github.com/adtkcn/LuckDraw</a>
+    </div>
     <script src="./luckDraw.js"></script>
     <script>
         var data = [
@@ -85,7 +90,7 @@
             console.log(luck)
             luck.start(39, function (err, res) {
                 if (err) {
-                    return console.log("err", err)
+                    return alert(err)
                 }
                 console.log("res", res)
             })
@@ -102,6 +107,7 @@
             { goods: 30, name: "啤酒", pics: './huasheng.jpg' },
             { goods: 40, name: "饮料", pics: './huasheng.jpg' },], function (err) {
                 console.log(err)
+                alert(err)
             })
         } 
     </script>
