@@ -36,7 +36,7 @@ function luckdraw(canvas, data) {
 		var ctx = canvas.getContext("2d");
 		var canvasW = this.canvas.width; // 画板的高度
 		var canvasH = this.canvas.height; // 画板的宽度
-		console.log(canvasW);
+		// console.log(canvasW);
 		ctx.fillStyle = "#fff000";
 		ctx.clearRect(0, 0, canvasW, canvasH);//去掉背景默认的黑色
 		console.log(canvasW);

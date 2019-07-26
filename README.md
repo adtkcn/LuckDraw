@@ -36,7 +36,9 @@ var luck = new luckdraw(document.getElementById("wheelCanvas"), data); //data中
 	console.log("res", res)
 })
 
-
+```
+## 属性与方法
+```
 /**
 * 重新设置商品数据
 * 在转动时禁止重新设置
@@ -82,4 +84,6 @@ luck.insideRadius = 10; //转盘内圆的半径
 luck.startAngle = 0; //开始角度
 luck.bRotate = false;//是否停止:停止;ture:旋转
 
+
 ```
+## 旋转时间和旋转规律由css中的transition决定
