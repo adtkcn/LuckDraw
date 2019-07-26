@@ -80,12 +80,14 @@ function luckdraw(canvas, data) {
 	this.loadImg = function () {
 		for (var i = 0; i < this.data.length; i++) {
 			if (this.data[i].pics) {
+
 				var imgUrl = new Image();
 				imgUrl.src = this.data[i].pics;
-				imgUrl.onload = function () {
+				imgUrl.onload = function (i, imgUrl) {
+					this.data[i].imgUrl = imgUrl
 					this.drawWheelCanvas();
-				}.bind(this)
-				this.data[i].imgUrl = imgUrl
+				}.bind(this, i, imgUrl)
+
 			}
 		}
 		this.drawWheelCanvas();
@@ -150,3 +152,5 @@ function luckdraw(canvas, data) {
 		}
 	};
 }
+
+// export default luckdraw = luckdraw;
