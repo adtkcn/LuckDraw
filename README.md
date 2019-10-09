@@ -14,12 +14,12 @@
 
 
  var data = [
-            { good: 19, name: "花生", pics: './huasheng.jpg' },
-            { good: 39, name: "瓜子", pics: './huasheng.jpg' },
-            { good: 30, name: "啤酒", pics: './huasheng.jpg' },
-            { good: 40, name: "饮料", pics: './huasheng.jpg' },
-            { good: 16, name: "矿泉水", pics: './huasheng.jpg' },
-            { good: 19, name: "花生", pics: './huasheng.jpg' }];
+            { goods: 19, name: "花生", pics: './huasheng.jpg' },
+            { goods: 39, name: "瓜子", pics: './huasheng.jpg' },
+            { goods: 30, name: "啤酒", pics: './huasheng.jpg' },
+            { goods: 40, name: "饮料", pics: './huasheng.jpg' },
+            { goods: 16, name: "矿泉水", pics: './huasheng.jpg' },
+            { goods: 19, name: "花生", pics: './huasheng.jpg' }];
 
 var luck = new luckdraw(document.getElementById("wheelCanvas"), data); //data中pics是可选的
 
